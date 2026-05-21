@@ -1,0 +1,6 @@
+settings.local.json
+memory/progress.txt
+memory/people.md
+*.log
+*.tmp
+.DS_Store
