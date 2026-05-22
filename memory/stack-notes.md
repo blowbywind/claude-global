@@ -1,16 +1,16 @@
-# 자주 쓰는 기술 스택 메모
+# Tech Stack Notes
 
-## 프론트엔드
+## Frontend
 - Framework: Next.js 14 (App Router)
 - Styling: Tailwind CSS + shadcn/ui
 - State: Zustand
 
-## 백엔드
+## Backend
 - Runtime: Node.js 20 LTS
 - Framework: Fastify
 - DB: PostgreSQL + Prisma
 
-## 도구
+## Tooling
 - Package Manager: pnpm
 - Linter: ESLint + Prettier
 - Test: Vitest

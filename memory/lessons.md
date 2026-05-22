@@ -1,9 +1,10 @@
-# Claude 학습 로그 (실수 기록)
+# Claude Mistake Log
 
-> Claude가 실수할 때마다 누적되는 학습 로그입니다.
-> 형식: [날짜] 상황 / 실수 / 교훈
+> Accumulated learning log — one entry per mistake.
+> Format: [date] situation / mistake / lesson
 
-## 2026-XX-XX
-- 상황: 
-- 실수: 
-- 교훈:
+## Template
+- Date:
+- Situation:
+- Mistake:
+- Lesson:

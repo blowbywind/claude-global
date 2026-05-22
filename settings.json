@@ -1,4 +1,8 @@
 {
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "60000",
+    "BASH_MAX_TIMEOUT_MS": "300000"
+  },
   "permissions": {
     "allow": [
       "Read(**)",
@@ -8,6 +12,9 @@
       "Bash(git log:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
       "Bash(npm install:*)",
       "Bash(npm run:*)",
       "Bash(npm test:*)",
@@ -18,7 +25,19 @@
       "Bash(pip install:*)",
       "Bash(ls:*)",
       "Bash(cat:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(echo:*)",
+      "Bash(pwd)",
+      "Bash(which:*)",
+      "Bash(jq:*)",
+      "Bash(curl:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -28,7 +47,6 @@
       "Read(**/*.key)",
       "Bash(rm -rf:*)",
       "Bash(sudo:*)",
-      "Bash(curl:*|*sh)",
       "Bash(git push --force:*)",
       "Bash(git reset --hard:*)",
       "Bash(DROP TABLE:*)",
@@ -36,38 +54,27 @@
     ]
   },
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Read",
-        "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/pre-tool-use/block-env-read.sh" }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/pre-tool-use/block-dangerous.sh" }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/post-tool-use/auto-format.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-tool-use/auto-format.sh"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/session-start/load-context.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-start/load-context.sh"
+          }
         ]
       }
     ]
   },
-  "env": {
-    "BASH_DEFAULT_TIMEOUT_MS": "60000",
-    "BASH_MAX_TIMEOUT_MS": "300000"
-  }
+  "theme": "dark"
 }

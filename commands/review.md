@@ -1,21 +1,21 @@
 ---
-description: 현재 변경 사항에 대한 코드 리뷰
+description: Code review of current changes
 ---
 
-다음 관점에서 현재 변경 사항을 리뷰하세요:
+Review the current changes from these perspectives:
 
-## 리뷰 체크리스트
-1. **정확성**: 의도한 동작을 하는가?
-2. **가독성**: 6개월 후의 내가 이해할 수 있는가?
-3. **성능**: 명백한 비효율은 없는가?
-4. **보안**: 입력 검증, 비밀 노출 위험은?
-5. **테스트**: 핵심 로직에 테스트가 있는가?
-6. **컨벤션**: 프로젝트 규칙을 따르는가?
+## Review Checklist
+1. **Correctness**: Does it do what it's supposed to?
+2. **Readability**: Will I understand this in 6 months?
+3. **Performance**: Any obvious inefficiencies?
+4. **Security**: Input validation, secret exposure risks?
+5. **Tests**: Are there tests for core logic?
+6. **Conventions**: Does it follow project rules?
 
-## 출력 형식
-- 🔴 Critical: 반드시 수정
-- 🟡 Warning: 개선 권장
-- 🟢 Suggestion: 선택적 개선
-- ✅ Good: 잘 작성된 부분
+## Output Format
+- Critical: must fix
+- Warning: improvement recommended
+- Suggestion: optional improvement
+- Good: well written
 
-리뷰 대상: $ARGUMENTS
+Review target: $ARGUMENTS

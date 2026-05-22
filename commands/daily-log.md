@@ -1,24 +1,24 @@
 ---
-description: 오늘 작업한 내용 정리
+description: Summarize today's work
 ---
 
-오늘 작업한 내용을 아래 형식으로 정리하세요:
+Summarize today's work in the following format:
 
-## 📅 일일 작업 로그 - [오늘 날짜]
+## Daily Log - [today's date]
 
-### ✅ 완료한 작업
-- 
+### Completed
+-
 
-### 🚧 진행 중
-- 
+### In Progress
+-
 
-### 🚫 막힌 부분
-- 
+### Blocked
+-
 
-### 💡 배운 점
-- (`memory/lessons.md`에 추가할 항목)
+### Learned
+- (items to add to `memory/lessons.md`)
 
-### 📌 내일 할 일
-- 
+### Tomorrow
+-
 
-근거: `git log --since="6 hours ago"` 및 최근 대화 내용
+Reference: `git log --since="6 hours ago"` and recent conversation

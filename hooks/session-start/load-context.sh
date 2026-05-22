@@ -1,8 +1,13 @@
 #!/bin/bash
-# 세션 시작 시 컨텍스트 주입
+# Session start: reference lessons + clean up old backups
 
-cat <<EOF
+# Keep only the 3 most recent backups per pattern
+for pattern in ".claude.json.backup" "settings.json.backup" "CLAUDE.md.backup"; do
+  ls -t ~/.claude/backups/${pattern}.* 2>/dev/null | tail -n +4 | xargs rm -f 2>/dev/null
+done
+
+cat <<'EOF'
 {
-  "additionalContext": "오늘은 $(date '+%Y-%m-%d %A')입니다. 작업 시작 전 ~/.claude/memory/lessons.md 를 확인하고 같은 실수를 반복하지 마세요."
+  "additionalContext": "Before starting work, check ~/.claude/memory/lessons.md to avoid repeating past mistakes."
 }
 EOF

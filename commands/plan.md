@@ -1,30 +1,30 @@
 ---
-description: 작업 시작 전 상세 계획 수립
+description: Create a detailed plan before starting work
 ---
 
-다음 작업에 대해 코드를 작성하기 **전에** 반드시 아래 형식으로 계획을 먼저 제시하세요:
+Before writing any code, present a plan in the following format:
 
-## 📋 작업 계획
+## Task Plan
 
-### 1. 목표
-- 무엇을 달성하려는가?
+### 1. Goal
+- What are we trying to achieve?
 
-### 2. 영향 범위
-- 수정될 파일 목록
-- 영향받는 모듈/기능
+### 2. Impact Scope
+- List of files to modify
+- Affected modules/features
 
-### 3. 단계별 작업
+### 3. Step-by-Step
 1. [ ] Step 1
 2. [ ] Step 2
 3. [ ] Step 3
 
-### 4. 리스크 & 대응
-- 예상 리스크
-- 롤백 방법
+### 4. Risks & Mitigation
+- Expected risks
+- Rollback method
 
-### 5. 검증 방법
-- 어떻게 성공을 확인할 것인가?
+### 5. Verification
+- How will we confirm success?
 
-**작업 요청**: $ARGUMENTS
+**Task**: $ARGUMENTS
 
-계획 승인 전까지 코드 작성을 시작하지 마세요.
+Do not start writing code until the plan is approved.

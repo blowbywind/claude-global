@@ -1,6 +1,26 @@
-settings.local.json
-memory/progress.txt
-memory/people.md
+# Credentials & auth — never commit
+.credentials.json
+mcp-needs-auth-cache.json
+session-env/
+sessions/
+shell-snapshots/
+
+# Runtime noise
+ide/
+cache/
+backups/
+*.lock
 *.log
 *.tmp
+.last-cleanup
 .DS_Store
+
+# Runtime data
+history.jsonl
+file-history/
+projects/
+plugins/
+
+# Local overrides
+settings.local.json
+memory/progress.txt

@@ -1,19 +1,21 @@
 #!/bin/bash
-# 파일 저장 후 자동 포맷
+# 파일 저장 후 자동 포맷 (로컬 바이너리 우선, 없으면 skip)
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 
-if [[ -z "$FILE_PATH" ]]; then
-  exit 0
-fi
+[[ -z "$FILE_PATH" ]] && exit 0
 
 case "$FILE_PATH" in
   *.ts|*.tsx|*.js|*.jsx|*.json)
-    npx prettier --write "$FILE_PATH" 2>/dev/null
+    if command -v prettier &>/dev/null; then
+      prettier --write "$FILE_PATH" 2>/dev/null
+    elif [[ -x "./node_modules/.bin/prettier" ]]; then
+      ./node_modules/.bin/prettier --write "$FILE_PATH" 2>/dev/null
+    fi
     ;;
   *.py)
-    black "$FILE_PATH" 2>/dev/null
+    command -v black &>/dev/null && black "$FILE_PATH" 2>/dev/null
     ;;
 esac
 

@@ -1,45 +1,45 @@
 ---
-description: Conventional Commits 형식의 깔끔한 커밋 생성
+description: Create a clean commit in Conventional Commits format
 ---
 
-현재 변경 사항을 분석하여 Conventional Commits 형식으로 커밋하세요.
+Analyze current changes and commit using Conventional Commits format.
 
-## 절차
-1. `git status` 및 `git diff` 실행
-2. 변경 사항을 논리적 단위로 그룹화
-3. 아래 형식으로 커밋 메시지 작성:
+## Steps
+1. Run `git status` and `git diff`
+2. Group changes into logical units
+3. Write commit message in this format:
 
-````
+```
 <type>(<scope>): <subject>
 
 <body>
 
 <footer>
-````
+```
 
-## type 종류
-- **feat**: 새 기능
-- **fix**: 버그 수정
-- **docs**: 문서
-- **style**: 포맷 (코드 동작 변경 없음)
-- **refactor**: 리팩토링
-- **test**: 테스트
-- **chore**: 빌드/설정
+## Types
+- **feat**: new feature
+- **fix**: bug fix
+- **docs**: documentation
+- **style**: formatting (no logic change)
+- **refactor**: refactoring
+- **test**: tests
+- **chore**: build/config
 
-## 규칙
-- subject는 50자 이내, 명령형 (예: "add login API" / "fix typo")
-- body는 "왜"를 설명 (무엇이 아니라)
-- 한 커밋 = 한 가지 논리적 변경
-- scope는 모듈명 또는 도메인명 (예: auth, members, db)
+## Rules
+- Subject under 50 chars, imperative mood (e.g. "add login API", "fix typo")
+- Body explains the *why*, not the *what*
+- One commit = one logical change
+- Scope is module or domain name (e.g. auth, members, db)
 
-## 작성 예시
-````
+## Example
+```
 feat(auth): add JWT refresh token endpoint
 
-기존 access token만으로는 7일 이상 세션 유지가 어려워
-refresh token 발급/갱신 로직을 추가함.
+Access token alone couldn't maintain sessions beyond 7 days,
+so refresh token issuance and renewal logic was added.
 
 Closes #42
-````
+```
 
-추가 컨텍스트: $ARGUMENTS
+Additional context: $ARGUMENTS
