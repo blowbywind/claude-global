@@ -48,9 +48,7 @@ DANGEROUS_PATTERNS=(
   "git clean -d"
   "git stash drop"
   "git stash clear"
-  # settings.json deny의 systemctl/crontab/ssh-keygen/publish도 동일 래핑 우회 가능
-  "systemctl "
-  "crontab "
+  # settings.json deny의 ssh-keygen/publish도 동일 래핑 우회 가능
   "ssh-keygen "
   "npm publish"
   "pnpm publish"
@@ -61,6 +59,20 @@ for pattern in "${DANGEROUS_PATTERNS[@]}"; do
     block "$pattern"
   fi
 done
+
+# systemctl/crontab: 2026-09-07 settings.json에 읽기전용 서브커맨드 allow 규칙 추가됨
+# (crontab -l, systemctl status/list-timers 등) — wrapping 우회 방지를 위해
+# 블랑켓 차단 대신 안전한 서브커맨드 화이트리스트만 통과시키는 방식으로 전환
+if echo "$COMMAND" | grep -qE '\bsystemctl\b'; then
+  if ! echo "$COMMAND" | grep -qE '\bsystemctl\b[^|;&]*\b(status|list-timers|list-units|list-unit-files|is-active|is-enabled|is-failed|show|cat|--help|--version)\b'; then
+    block "systemctl (읽기전용 서브커맨드만 허용: status/list-timers/list-units/is-active/is-enabled/show/cat)"
+  fi
+fi
+if echo "$COMMAND" | grep -qE '\bcrontab\b'; then
+  if ! echo "$COMMAND" | grep -qE '\bcrontab\b\s+-l\b'; then
+    block "crontab (crontab -l만 허용)"
+  fi
+fi
 
 # 원격 스크립트 실행 (pipe-to-shell) — 단어 경계 regex로 오탐 방지
 # | sha256sum, | shfmt, | shuf 등 차단하지 않음
