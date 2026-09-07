@@ -99,8 +99,6 @@
       "Read(~/.aws/*)",
       "Read(~/.config/gcloud/*)",
       "Bash(rm -rf:*)",
-      "Bash(systemctl:*)",
-      "Bash(crontab:*)",
       "Bash(ssh-keygen:*)",
       "Bash(git restore:*)",
       "Bash(git clean:*)",
