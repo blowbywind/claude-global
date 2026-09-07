@@ -23,5 +23,5 @@ Claude Code ↔ Obsidian 세컨드 브레인은 4계층으로 분리돼 있다 (
 - `claude/projects/` 승격: 프로젝트 상태 변경
 - 작업 전: 과거 결정·선호가 영향 줄 수 있으면 `grep -ri <키워드> ~/obsidian-vault/bbw-wiki/` 먼저 검색
 
-**미해결(사용자 판단):** root 소유권 churn, taxonomy 중복 명명. (SessionEnd 훅은 2026-09-07 확인 결과 settings.json + hooks/session-stop/save-session.sh로 이미 등록·해결됨)
+**미해결(사용자 판단):** root 소유권 churn. (SessionEnd 훅은 2026-09-07 확인 결과 settings.json + hooks/session-stop/save-session.sh로 이미 등록·해결됨. taxonomy 중복 명명도 2026-09-07 hnedu-erp.md/hnedu_erp.md 병합으로 해당 사례 해소 — 다른 프로젝트에 유사 사례 재발 가능성은 남아있음)
 상세: ADR `claude/decisions/2026-06-19-second-brain-evolution.md`. 관련 [[agent-architecture]].
