@@ -14,6 +14,7 @@ metadata:
 |---------|------|------|---------|
 | orchestrator | 감독 | 작업 분석·분해·위임·보고. 코드 직접 작성 금지, 자기 평가 금지 | X |
 | senior-strategist | 감독 | 설계 결정·기술 의사결정·아키텍처 검토. 구현 에이전트 호출 전 선행 | X |
+| research-agent | 리서치 | 외부 리서치(WebSearch/WebFetch) 전담, 기술 조사·라이브러리 비교·공식 문서 확인 | X |
 | backend-agent | 생성 | Fastify API, 서버 로직, 인증·권한, Node.js | O |
 | frontend-agent | 생성 | Next.js 15 컴포넌트, UI, Tailwind, Radix UI | O |
 | database-agent | 생성 | PostgreSQL 스키마, 마이그레이션(Prisma), 쿼리 최적화. EF Core 마이그레이션은 dotnet-api-agent 담당. | O |
@@ -36,6 +37,8 @@ metadata:
 | 기술 의사결정 | senior-strategist | — | evaluator-strict |
 | 리팩토링 | senior-strategist (범위 정의) | 해당 도메인 에이전트 | code-reviewer → evaluator-strict |
 | 외부 리서치·정보 수집 | research-agent | — | — (리서치 결과는 검증 불필요) |
+
+> **research-agent vs senior-strategist**: 외부 사실 조사(라이브러리 버전·공식 문서·사례)는 research-agent, 내부 설계 결정·트레이드오프 판단은 senior-strategist. 둘 다 필요하면 research-agent 선행 조사 → senior-strategist가 결과 종합.
 
 ### C#/.NET 스택 (hnedu_erp — .csproj/.sln 파일 존재 시)
 
@@ -77,20 +80,7 @@ metadata:
   → 모두 통과 시에만 완료 보고
 ```
 
-evaluator-strict 공통 통과 기준:
-
-**Node.js 스택:**
-- `pnpm build` 빌드 성공
-- `tsc --noEmit` 타입체크 통과
-- `eslint` / `prettier --check` 린트 통과
-- 기존 테스트 모두 통과
-
-**C#/.NET 스택 (스택별 오버라이드):**
-- `dotnet build --configuration Release` 빌드 성공
-- `dotnet test` 전체 테스트 통과
-- `dotnet format --verify-no-changes` 포맷 검사
-
-> 프로젝트별 커버리지·성능 지표 추가 기준은 해당 프로젝트 CLAUDE.md Dev Gate 섹션에 정의.
+evaluator-strict 공통 통과 기준 (스택별 세부 명령어) → `agents/evaluator-strict.md` 참조 (단일 소스).
 
 ## 에이전트 간 통신 — 중간 산출물 공유
 

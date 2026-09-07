@@ -142,14 +142,7 @@ docker network prune  # 미사용 네트워크 정리
 
 ## Caddy + hermes 대시보드 설정 — 폐기 (2026-09-04)
 
-**hermes는 더 이상 사용하지 않음.** `hermes-dnat.service` 삭제됨, `hermes-dashboard.service`(user)는 inactive/disabled 확인(2026-09-04 점검). 아래 섹션은 과거 기록이며 현재 인프라와 무관.
-
-<details>
-과거 구성(2026-06-11, 참고용— 현재 미적용):
-- Docker/Caddy: 80, 443만 매핑 (9119 없음 — hermes에 반환)
-- hermes s6 데몬: `127.0.0.1:19119`, hermes systemd: `0.0.0.0:9119`
-- Caddyfile: `/hermes*`, `/api/*`, `/assets/*` → `172.18.0.1:19119` reverse_proxy
-</details>
+**hermes는 더 이상 사용하지 않음** (2026-06-11 구성, `hermes-dnat.service` 삭제·`hermes-dashboard.service` inactive 확인, 재사용 불가).
 
 **Caddy 재시작 후 필수 작업** (여전히 유효):
 ```bash

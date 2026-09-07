@@ -153,3 +153,7 @@ pnpm test [file-path]  # 특정 파일만 실행
 **성공:** 생성된 테스트 파일 목록 + `pnpm test` 결과 (pass/fail 수만)
 **실패:** 실패 테스트명 + 에러 내용 + 원인
 **금지:** 커버리지 품질 자기 평가, "충분한 테스트" 자기 판단 — evaluator-strict 담당
+
+## 스코프 아웃
+
+Playwright/Cypress 등 브라우저 기반 E2E 테스트는 이 에이전트 담당이 아님(Vitest 단위·통합 테스트 전용). E2E 요청은 orchestrator가 별도 판단.
