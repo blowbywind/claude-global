@@ -36,8 +36,25 @@ DANGEROUS_PATTERNS=(
   # DB 파괴 (Prisma/PostgreSQL)
   "prisma migrate reset"
   "prisma db push --force-reset"
+  # git 파괴적 명령: settings.json deny는 선행 토큰만 매칭해 "sudo git reset --hard",
+  # "sh -c 'git push --force'" 같은 래핑/체이닝을 통과시킴 — substring 스캔으로 이중 방어
+  # (harness-scan 2026-09-07 발견)
+  "git reset --hard"
+  "git push --force"
+  "git restore ."
+  "git restore --staged"
+  "git restore --worktree"
+  "git clean -f"
+  "git clean -d"
+  "git stash drop"
+  "git stash clear"
+  # settings.json deny의 systemctl/crontab/ssh-keygen/publish도 동일 래핑 우회 가능
+  "systemctl "
+  "crontab "
+  "ssh-keygen "
+  "npm publish"
+  "pnpm publish"
 )
-# git push --force, git reset --hard는 settings.json deny로 처리 (중복 제거)
 
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do
   if [[ "$COMMAND" == *"$pattern"* ]]; then
@@ -64,6 +81,12 @@ fi
 # DB 파괴 명령 (대소문자 무관)
 if echo "$COMMAND" | grep -qiE '\b(dropdb|drop\s+database)\b'; then
   block "DB drop command"
+fi
+
+# kill/pkill에 음수 PID(-1) = 자신 소유 전체 프로세스 종료(현재 세션 셸 포함, 자해)
+# settings.json의 Bash(kill:*)는 특정 PID kill을 허용해야 하므로 -1만 별도 차단
+if echo "$COMMAND" | grep -qE '\b(kill|pkill|killall)\b[^|;&]*(^|[^0-9.-])-1([^0-9.]|$)'; then
+  block "kill/pkill with PID -1 (all owned processes)"
 fi
 
 # 시크릿 파일 읽기: block-env-read.sh는 Read 툴 file_path만 검사하므로
