@@ -1,25 +1,84 @@
 #!/bin/bash
-# 위험한 bash 명령 차단
+# 위험한 bash 명령 차단 (pre-tool-use)
 
 INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+COMMAND=$(echo "$INPUT" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',{}).get('command','') or '')" 2>/dev/null)
 
-# 위험 패턴
+[[ -z "$COMMAND" ]] && echo '{"decision": "allow"}' && exit 0
+
+block() {
+  echo "{\"decision\": \"block\", \"reason\": \"위험한 명령 감지: $1\"}"
+  exit 0
+}
+
+# rm -rf: 루트(/), 루트글로브(/*), 홈(~), 현재글로브(*) 만 차단
+# 허용: rm -rf /opt/specific-path 등 특정 경로 삭제 (CLAUDE.md 안전성 원칙 #4로 처리)
+# settings.json의 Bash(rm:*)는 allow 유지 — 이 hook이 위험 패턴만 선택 차단함
+if echo "$COMMAND" | grep -qE '\brm\s+-[a-z]*r[a-z]*f[a-z]*\s'; then
+  if echo "$COMMAND" | grep -qE '\brm\s+-[a-z]*r[a-z]*f[a-z]*\s+(\/\*?\s*$|\/\*?\s+|~\s*$|~\s+|\*\s*$|\*\s+)'; then
+    block "rm -rf on root/home/glob"
+  fi
+fi
+
 DANGEROUS_PATTERNS=(
-  "rm -rf /"
-  "rm -rf ~"
-  "rm -rf \*"
+  # Fork bomb
   ":(){ :|:& };:"
+  # 디스크 덮어쓰기
   "dd if=/dev/zero"
-  "mkfs"
+  "dd if=/dev/urandom"
   "> /dev/sda"
+  # 권한 파괴
+  "chmod -R 777 /"
+  "chmod -R 777 ~"
+  "chown -R root /"
+  # 파일 제로화
+  "truncate -s 0"
+  # DB 파괴 (Prisma/PostgreSQL)
+  "prisma migrate reset"
+  "prisma db push --force-reset"
 )
+# git push --force, git reset --hard는 settings.json deny로 처리 (중복 제거)
 
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do
   if [[ "$COMMAND" == *"$pattern"* ]]; then
-    echo "{\"decision\": \"block\", \"reason\": \"위험한 명령 감지: $pattern\"}"
-    exit 0
+    block "$pattern"
   fi
+done
+
+# 원격 스크립트 실행 (pipe-to-shell) — 단어 경계 regex로 오탐 방지
+# | sha256sum, | shfmt, | shuf 등 차단하지 않음
+if echo "$COMMAND" | grep -qE '\|\s*(sh|bash)(\s|$)'; then
+  block "pipe-to-shell detected"
+fi
+
+# git push -f 단축 플래그 (--force와 별개로 regex 차단)
+if echo "$COMMAND" | grep -qE '\bgit\s+push\b.*\s-[a-zA-Z]*f[a-zA-Z]*(\s|$)'; then
+  block "git push -f (force flag)"
+fi
+
+# mkfs: 블록 디바이스에만 차단 (/dev/ 경로)
+if echo "$COMMAND" | grep -qE '\bmkfs\b.*\/dev\/'; then
+  block "mkfs on block device"
+fi
+
+# DB 파괴 명령 (대소문자 무관)
+if echo "$COMMAND" | grep -qiE '\b(dropdb|drop\s+database)\b'; then
+  block "DB drop command"
+fi
+
+# 시크릿 파일 읽기: block-env-read.sh는 Read 툴 file_path만 검사하므로
+# cat/grep/sed/awk/head/tail 등 Bash 경유 읽기는 무방비였음 (harness-scan 2026-09-07 발견)
+SECRET_EXACT=(".env" ".env.local" ".env.development" ".env.production" ".env.staging" ".env.test" ".env.production.local" ".env.development.local")
+for pattern in "${SECRET_EXACT[@]}"; do
+  esc=$(printf '%s' "$pattern" | sed 's/[.[\*^$]/\\&/g')
+  if echo "$COMMAND" | grep -qE "(^|[\"'\`[:space:]/:])${esc}(\$|[\"'\`[:space:]])"; then
+    block "민감 파일 접근 의심: $pattern"
+  fi
+done
+
+SECRET_SUBSTR=("secrets" ".pem" ".key" ".credentials" "id_rsa" "id_dsa" "id_ecdsa" "id_ed25519" ".p12" ".pfx")
+for pattern in "${SECRET_SUBSTR[@]}"; do
+  [[ "$COMMAND" == *"$pattern"* ]] && block "민감 파일 접근 의심: $pattern"
 done
 
 echo '{"decision": "allow"}'

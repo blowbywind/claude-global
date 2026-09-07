@@ -1,6 +1,33 @@
+# ── 민감 정보 ──────────────────────────────────────────
+.credentials.json
+.claude.json
+.git-credentials
 settings.local.json
-memory/progress.txt
-memory/people.md
+mcp-needs-auth-cache.json
+
+# ── Claude Code 런타임 데이터 (세션·히스토리·캐시) ───────
+# 자동 생성·정리됨 — git 불필요
+projects/
+session-env/
+file-history/
+shell-snapshots/
+sessions/
+telemetry/
+ide/
+tasks/
+cache/
+plans/
+plugins/
+history.jsonl
+.last-cleanup
+.last-update-result.json
+skills/_drafts/
+
+# ── 백업 ────────────────────────────────────────────────
+backups/
+settings.json.bak-*
+
+# ── OS / 에디터 ────────────────────────────────────────
+.DS_Store
 *.log
 *.tmp
-.DS_Store

@@ -1,73 +1,195 @@
 {
+  "cleanupPeriodDays": 30,
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "30000",
+    "BASH_MAX_TIMEOUT_MS": "300000",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "32000"
+  },
   "permissions": {
     "allow": [
       "Read(**)",
+      "Write(**)",
       "Edit(**)",
-      "Bash(git status)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(npm install:*)",
-      "Bash(npm run:*)",
-      "Bash(npm test:*)",
-      "Bash(pnpm install:*)",
-      "Bash(pnpm run:*)",
-      "Bash(yarn:*)",
+      "Glob(**)",
+      "Grep(**)",
+      "Bash(git:*)",
+      "Bash(pnpm:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
       "Bash(python:*)",
-      "Bash(pip install:*)",
+      "Bash(python3:*)",
+      "Bash(pip:*)",
+      "Bash(pip3:*)",
       "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
       "Bash(cat:*)",
-      "Bash(mkdir:*)"
+      "Bash(botsudo cat *)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(echo:*)",
+      "Bash(printf:*)",
+      "Bash(wc:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(cut:*)",
+      "Bash(tr:*)",
+      "Bash(diff:*)",
+      "Bash(jq:*)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(xargs:*)",
+      "Bash(tee:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(chmod:*)",
+      "Bash(stat:*)",
+      "Bash(file:*)",
+      "Bash(pwd)",
+      "Bash(which:*)",
+      "Bash(type:*)",
+      "Bash(date:*)",
+      "Bash(whoami)",
+      "Bash(ps:*)",
+      "Bash(kill:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(tar:*)",
+      "Bash(zip:*)",
+      "Bash(unzip:*)",
+      "Bash(git push:*)",
+      "Bash(sudo ufw *)",
+      "Bash(sudo iptables *)",
+      "Bash(sudo ip *)",
+      "Bash(sudo docker *)",
+      "Bash(sudo /opt/web-infra/*)",
+      "Bash(ssh hnedu-erp:*)",
+      "Bash(ssh -F $HOME/.ssh/config -o UserKnownHostsFile=$HOME/.ssh/known_hosts hnedu-erp*)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=1536\" npx eslint src/components/calendar/leave-detail-modal.tsx src/lib/calendar-types.ts)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx eslint src/components/calendar/schedule-detail-drawer.tsx src/components/calendar/leave-detail-modal.tsx src/components/meeting/meeting-detail-drawer.tsx \"src/app/\\(app\\)/page.tsx\" src/lib/calendar-types.ts)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" timeout 280 npx next build)",
+      "Bash(./scripts/deploy-web-220.sh)",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx eslint \"src/app/\\(app\\)/page.tsx\")"
     ],
     "deny": [
       "Read(**/.env)",
-      "Read(**/.env.*)",
+      "Read(**/.env.local)",
+      "Read(**/.env.development)",
+      "Read(**/.env.production)",
+      "Read(**/.env.staging)",
+      "Read(**/.env.test)",
       "Read(**/secrets/**)",
       "Read(**/*.pem)",
       "Read(**/*.key)",
-      "Bash(rm -rf:*)",
-      "Bash(sudo:*)",
-      "Bash(curl:*|*sh)",
+      "Read(**/.credentials*)",
+      "Bash(dd:*)",
       "Bash(git push --force:*)",
       "Bash(git reset --hard:*)",
-      "Bash(DROP TABLE:*)",
-      "Bash(npm publish:*)"
+      "Bash(npm publish:*)",
+      "Bash(pnpm publish:*)",
+      "Read(~/.ssh/*)",
+      "Read(~/.aws/*)",
+      "Read(~/.config/gcloud/*)",
+      "Bash(rm -rf:*)",
+      "Bash(systemctl:*)",
+      "Bash(crontab:*)",
+      "Bash(ssh-keygen:*)",
+      "Bash(git restore:*)",
+      "Bash(git clean:*)",
+      "Bash(git stash:*)"
     ]
   },
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Read",
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/pre-tool-use/block-env-read.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/pre-tool-use/block-env-read.sh"
+          }
         ]
       },
       {
         "matcher": "Bash",
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/pre-tool-use/block-dangerous.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/pre-tool-use/block-dangerous.sh"
+          }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit|Write",
+        "matcher": "Edit|Write|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/post-tool-use/auto-format.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-tool-use/auto-format.sh"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/session-start/load-context.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-start/load-context.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-stop/save-session.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"[봇 작업 종료] 완료 보고를 확인하세요 — 누락됐으면 다시 요청하세요\"}'",
+            "statusMessage": "봇 완료 확인 중..."
+          }
         ]
       }
     ]
   },
-  "env": {
-    "BASH_DEFAULT_TIMEOUT_MS": "60000",
-    "BASH_MAX_TIMEOUT_MS": "300000"
-  }
+  "theme": "dark",
+  "mcpServers": {
+    "obsidian-gateway": {
+      "command": "node",
+      "args": [
+        "/home/bbw/ai-ops/mcp-servers/obsidian-gateway/index.js"
+      ],
+      "env": {
+        "VAULT_ROOT": "/home/bbw/obsidian-vault/bbw-wiki"
+      }
+    },
+    "playwright": {
+      "command": "node",
+      "args": [
+        "/home/bbw/ai-ops/tools/playwright-mcp/node_modules/@playwright/mcp/cli.js"
+      ],
+      "env": {
+        "PLAYWRIGHT_HEADLESS": "true",
+        "PLAYWRIGHT_BROWSERS_PATH": "/home/bbw/ai-ops/tools/playwright-mcp/.browsers"
+      }
+    }
+  },
+  "autoCompactThreshold": 0.6
 }
